@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Finance Hub</title>
+  <style>
+    :root{
+      --bg:#f7f9fc;
+      --surface:#ffffff;
+      --text:#1f2937;
+      --muted:#64748b;
+      --brand:#6ea8ff;        /* calm student-friendly blue */
+      --brand-2:#b387fa;      /* lilac */
+      --accent:#78d6c6;       /* mint */
+      --warn:#ffb4a2;         /* soft coral */
+      --ok:#a7f3d0;           /* mint light */
+      --ring: rgba(110,168,255,.45);
+      --shadow: 0 10px 20px rgba(2,8,23,.07);
+      --radius: 16px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text); background:linear-gradient(180deg,var(--bg),#eef2ff 60%);
+    }
+    .container{max-width:1200px;margin:0 auto;padding:20px}
+    header{
+      position:sticky; top:0; z-index:10; backdrop-filter:saturate(1.2) blur(6px);
+      background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.7));
+      border-bottom:1px solid rgba(99,102,241,.12);
+    }
+    .brand{display:flex;align-items:center;gap:12px;padding:12px 0}
+    .logo{width:36px;height:36px;border-radius:10px;background:conic-gradient(from 210deg,var(--brand),var(--brand-2),var(--accent)); box-shadow:inset 0 0 0 2px #fff, var(--shadow)}
+    .brand h1{font-size:20px;margin:0;font-weight:800;letter-spacing:.2px}
+
+    /* Tabs */
+    .tabs{display:flex;flex-wrap:wrap;gap:10px;padding-bottom:12px}
+    .tab-btn{border:none;background:var(--surface);padding:10px 14px;border-radius:12px;cursor:pointer;color:var(--muted);box-shadow:var(--shadow); transition:all .2s ease; font-weight:600;border:1px solid rgba(2,8,23,.06)}
+    .tab-btn[aria-selected="true"]{ color:var(--text); background:linear-gradient(180deg, #fff, #f5f7ff); outline:2px solid transparent; box-shadow:0 10px 24px rgba(99,102,241,.12);}
+    .tab-btn:focus-visible{outline:3px solid var(--ring)}
+
+    /* Cards & sections */
+    .grid{display:grid; gap:16px}
+    @media(min-width:900px){.grid.cols-2{grid-template-columns:1fr 1fr}}
+    @media(min-width:1100px){.grid.cols-3{grid-template-columns:repeat(3, 1fr)}}
+    .card{background:var(--surface); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); border:1px solid rgba(2,8,23,.06)}
+    h2{margin:.2rem 0 1rem;font-size:22px}
+    h3{margin:.2rem 0 .6rem;font-size:18px}
+    p{margin:.4rem 0}
+    .muted{color:var(--muted)}
+    .badge{display:inline-block;padding:2px 8px;border-radius:999px;background:#eef2ff;color:#3730a3;font-weight:700;font-size:12px}
+
+    .input, select, textarea{width:100%; padding:10px 12px; border-radius:12px; border:1px solid rgba(2,8,23,.12); background:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    .row > *{flex:1 1 220px}
+
+    .btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
+    .btn.primary{background:linear-gradient(180deg,var(--brand),#5a95ff); color:#fff}
+    .btn.secondary{background:#f3f4f6}
+    .btn.warn{background:var(--warn)}
+    .btn:focus-visible{outline:3px solid var(--ring)}
+
+    .list{display:grid; gap:10px}
+    .item{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 12px; background:#fff; border:1px solid rgba(2,8,23,.08); border-radius:12px}
+    .item small{color:var(--muted)}
+    .pill{padding:4px 8px;border-radius:999px;background:#ecfeff;border:1px solid #bae6fd}
+    .pill.urgent{background:#fff1f2;border-color:#fecdd3; color:#b91c1c}
+
+    .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .spacer{flex:1}
+
+    /* T-accounts */
+    .tacct{display:grid; grid-template-columns:1fr 1fr; border:1px solid rgba(2,8,23,.16); border-radius:12px; overflow:hidden}
+    .tacct header{grid-column:1/3; background:#f8fafc; padding:8px 10px; font-weight:700}
+    .tacct div{padding:8px 10px}
+    .tacct .col{border-left:1px solid rgba(2,8,23,.06)}
+
+    /* Tables for practice templates */
+    table{width:100%; border-collapse:separate; border-spacing:0}
+    th, td{padding:10px; border-bottom:1px solid rgba(2,8,23,.08)}
+    tr:last-child td{border-bottom:none}
+    th{text-align:left; font-size:14px; color:var(--muted)}
+    td input{width:100%; border:none; background:transparent; padding:6px 8px; border-radius:8px}
+    td input:focus{outline:2px solid var(--ring); background:#fff}
+    .totals{font-weight:800}
+
+    footer{margin:40px 0 20px; text-align:center; color:var(--muted); font-size:14px}
+
+    /* Accessible panels */
+    [role="tabpanel"]{display:none}
+    [role="tabpanel"].active{display:block}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="brand" aria-label="Site header">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Student Finance Hub</h1>
+          <div class="muted" style="font-size:13px">Accounting basics • Planner • Practice templates • Account search</div>
+        </div>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="Main tabs">
+        <button class="tab-btn" role="tab" aria-selected="true" aria-controls="home" id="tab-home">Home</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="dummies" id="tab-dummies">For Dummies</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="planner" id="tab-planner">Planner</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="accounts" id="tab-accounts">Account Lookup</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="practice" id="tab-practice">Practice Templates</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="theme" id="tab-theme">Theme</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HOME -->
+    <section id="home" role="tabpanel" class="active">
+      <div class="grid cols-2">
+        <div class="card">
+          <h2>Welcome 👋</h2>
+          <p>This is your all‑in‑one space to learn accounting, plan assignments and exams, look up accounts, and practice with real‑style templates. Everything saves automatically in your browser (<span class="badge">localStorage</span>).</p>
+          <p class="muted">Tip: Use on desktop for the richest layout. No log‑in required.</p>
+        </div>
+        <div class="card">
+          <h2>Color vibe</h2>
+          <p>Calm pastel palette designed to feel friendly and low‑stress while keeping contrast readable.</p>
+          <div class="row">
+            <div class="item"><span class="pill" style="background:var(--brand); color:#fff">brand</span><small>#6ea8ff</small></div>
+            <div class="item"><span class="pill" style="background:var(--brand-2); color:#fff">lilac</span><small>#b387fa</small></div>
+            <div class="item"><span class="pill" style="background:var(--accent)">mint</span><small>#78d6c6</small></div>
+            <div class="item"><span class="pill" style="background:var(--warn)">coral</span><small>#ffb4a2</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOR DUMMIES -->
+    <section id="dummies" role="tabpanel">
+      <div class="grid cols-3">
+        <article class="card">
+          <h2>Debits vs Credits</h2>
+          <p>Remember <strong>DEALER</strong>: <em>Debits</em> increase <strong>D</strong>ividends, <strong>E</strong>xpenses, <strong>A</strong>ssets; <em>Credits</em> increase <strong>L</strong>iabilities, <strong>E</strong>quity, <strong>R</strong>evenue.</p>
+          <div class="tacct" aria-label="Cash T-account example">
+            <header>Cash (Asset)</header>
+            <div>+ Debit</div>
+            <div class="col">− Credit</div>
+          </div>
+          <p class="muted">If Cash goes up → <strong>debit</strong> Cash. If it goes down → <strong>credit</strong> Cash.</p>
+        </article>
+        <article class="card">
+          <h2>Accounts Receivable (A/R)</h2>
+          <p>Money customers owe you for sales on account. It's an <strong>Asset</strong> (normal <em>debit</em> balance).</p>
+          <div class="tacct"><header>A/R</header><div>+ Debit</div><div class="col">− Credit</div></div>
+          <p><strong>Example entry:</strong> Sale on account $500 → <em>Debit</em> A/R 500; <em>Credit</em> Sales Revenue 500.</p>
+        </article>
+        <article class="card">
+          <h2>Accounts Payable (A/P)</h2>
+          <p>Amounts you owe suppliers. It's a <strong>Liability</strong> (normal <em>credit</em> balance).</p>
+          <div class="tacct"><header>A/P</header><div>− Debit</div><div class="col">+ Credit</div></div>
+          <p><strong>Example entry:</strong> Buy supplies on account $200 → <em>Debit</em> Supplies 200; <em>Credit</em> A/P 200.</p>
+        </article>
+        <article class="card">
+          <h2>Revenue vs Expense</h2>
+          <p><strong>Revenue</strong> increases equity (credit). <strong>Expenses</strong> decrease equity (debit). Net income = Revenues − Expenses.</p>
+        </article>
+        <article class="card">
+          <h2>Trial Balance ➜ Statements</h2>
+          <p>From the <em>adjusted trial balance</em>, build: Income Statement → Statement of Retained Earnings → Balance Sheet. Assets = Liabilities + Equity must balance.</p>
+        </article>
+        <article class="card">
+          <h2>Quick Rules</h2>
+          <ul>
+            <li>Unearned Revenue is a <strong>Liability</strong> until you perform.</li>
+            <li>Prepaid items are <strong>Assets</strong> until used.</li>
+            <li>Contra-accounts carry the opposite normal balance.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- PLANNER (lists first, add forms below) -->
+    <section id="planner" role="tabpanel">
+      <div id="planner-list" class="grid cols-2">
+        <div class="card">
+          <h2>Assignments</h2>
+          <div class="toolbar">
+            <input class="input" id="a-search" placeholder="Search assignments..."/>
+            <div class="spacer"></div>
+            <select id="a-sort" class="input" style="max-width:200px">
+              <option value="due">Sort: Due date</option>
+              <option value="course">Sort: Course</option>
+              <option value="urgency">Sort: Urgency</option>
+            </select>
+          </div>
+          <div class="grid cols-2" style="margin-top:10px">
+            <div>
+              <h3>Urgent</h3>
+              <div id="a-urgent" class="list" aria-live="polite"></div>
+            </div>
+            <div>
+              <h3>Less urgent</h3>
+              <div id="a-normal" class="list" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Exams</h2>
+          <div class="toolbar">
+            <input class="input" id="e-search" placeholder="Search exams..."/>
+            <div class="spacer"></div>
+            <select id="e-sort" class="input" style="max-width:200px">
+              <option value="date">Sort: Date</option>
+              <option value="course">Sort: Course</option>
+              <option value="urgency">Sort: Urgency</option>
+            </select>
+          </div>
+          <div class="grid cols-2" style="margin-top:10px">
+            <div>
+              <h3>Urgent</h3>
+              <div id="e-urgent" class="list" aria-live="polite"></div>
+            </div>
+            <div>
+              <h3>Less urgent</h3>
+              <div id="e-normal" class="list" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="planner-add" class="grid cols-2" style="margin-top:16px">
+        <div class="card">
+          <h2>Add assignment</h2>
+          <div class="row">
+            <input class="input" id="a-title" placeholder="Title (e.g., Chapter 3 HW)" />
+            <input class="input" id="a-course" placeholder="Course (e.g., ACC 101)" />
+          </div>
+          <div class="row">
+            <input class="input" type="date" id="a-due" />
+            <select id="a-urgency" class="input">
+              <option value="urgent">Urgent</option>
+              <option value="normal">Less urgent</option>
+            </select>
+          </div>
+          <textarea class="input" id="a-notes" placeholder="Notes (optional)"></textarea>
+          <div class="toolbar"><button class="btn primary" id="a-add">Add</button><div class="spacer"></div><button class="btn secondary" id="a-clear-done">Clear completed</button></div>
+        </div>
+        <div class="card">
+          <h2>Add exam</h2>
+          <div class="row">
+            <input class="input" id="e-title" placeholder="Exam title (e.g., Midterm 1)" />
+            <input class="input" id="e-course" placeholder="Course" />
+          </div>
+          <div class="row">
+            <input class="input" type="date" id="e-date" />
+            <select id="e-urgency" class="input">
+              <option value="urgent">Urgent</option>
+              <option value="normal">Less urgent</option>
+            </select>
+          </div>
+          <textarea class="input" id="e-scope" placeholder="Chapters / topics (optional)"></textarea>
+          <div class="toolbar"><button class="btn primary" id="e-add">Add</button><div class="spacer"></div><button class="btn secondary" id="e-clear-done">Clear completed</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACCOUNT LOOKUP -->
+    <section id="accounts" role="tabpanel">
+      <div class="card">
+        <h2>Search accounts</h2>
+        <div class="toolbar">
+          <input id="acct-q" class="input" placeholder="e.g., unearned revenue, depreciation expense, accumulated depreciation..."/>
+          <button id="acct-clear" class="btn secondary">Clear</button>
+        </div>
+        <div id="acct-results" class="list" style="margin-top:12px"></div>
+      </div>
+    </section>
+
+    <!-- PRACTICE TEMPLATES -->
+    <section id="practice" role="tabpanel">
+      <div class="grid cols-2">
+        <div class="card" id="inc-card">
+          <h2>Income Statement (practice)</h2>
+          <table>
+            <thead><tr><th>Line</th><th>Amount</th></tr></thead>
+            <tbody id="inc-body">
+              <tr><td>Sales / Service Revenue</td><td><input type="number" step="0.01" data-inc="revenue"></td></tr>
+              <tr><td>Cost of Goods Sold</td><td><input type="number" step="0.01" data-inc="cogs"></td></tr>
+              <tr><td>Operating Expenses</td><td><input type="number" step="0.01" data-inc="opex"></td></tr>
+              <tr><td>Other Revenues (gain, interest)</td><td><input type="number" step="0.01" data-inc="otherrev"></td></tr>
+              <tr><td>Other Expenses (loss, interest)</td><td><input type="number" step="0.01" data-inc="otherexp"></td></tr>
+              <tr class="totals"><td>Net Income</td><td id="inc-ni">0.00</td></tr>
+            </tbody>
+          </table>
+          <div class="toolbar"><button class="btn secondary" id="inc-reset">Reset</button><button class="btn primary" id="inc-save">Save</button></div>
+        </div>
+        <div class="card" id="bs-card">
+          <h2>Balance Sheet (practice)</h2>
+          <table>
+            <thead><tr><th>Assets</th><th>Amount</th></tr></thead>
+            <tbody id="bs-assets">
+              <tr><td>Cash</td><td><input type="number" step="0.01" data-bs-a="cash"></td></tr>
+              <tr><td>Accounts Receivable</td><td><input type="number" step="0.01" data-bs-a="ar"></td></tr>
+              <tr><td>Supplies / Inventory</td><td><input type="number" step="0.01" data-bs-a="inv"></td></tr>
+              <tr><td>Equipment (net)</td><td><input type="number" step="0.01" data-bs-a="equip"></td></tr>
+              <tr class="totals"><td>Total Assets</td><td id="bs-ta">0.00</td></tr>
+            </tbody>
+          </table>
+          <table>
+            <thead><tr><th>Liabilities & Equity</th><th>Amount</th></tr></thead>
+            <tbody id="bs-le">
+              <tr><td>Accounts Payable</td><td><input type="number" step="0.01" data-bs-l="ap"></td></tr>
+              <tr><td>Unearned Revenue</td><td><input type="number" step="0.01" data-bs-l="unrev"></td></tr>
+              <tr><td>Notes Payable</td><td><input type="number" step="0.01" data-bs-l="np"></td></tr>
+              <tr><td>Owner's Equity / Retained Earnings</td><td><input type="number" step="0.01" data-bs-e="equity"></td></tr>
+              <tr class="totals"><td>Total Liabilities + Equity</td><td id="bs-tle">0.00</td></tr>
+            </tbody>
+          </table>
+          <p id="bs-status" class="muted">Balance check: <span class="badge" id="bs-badge">Not calculated</span></p>
+          <div class="toolbar"><button class="btn secondary" id="bs-reset">Reset</button><button class="btn primary" id="bs-save">Save</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Journal Entries (practice)</h2>
+        <div class="toolbar">
+          <input id="je-date" type="date" class="input" style="max-width:220px"/>
+          <input id="je-memo" class="input" placeholder="Memo / description"/>
+          <button class="btn secondary" id="je-add-line">Add line</button>
+          <div class="spacer"></div>
+          <button class="btn primary" id="je-save">Save entry</button>
+        </div>
+        <div id="je-lines" class="list" style="margin-top:12px"></div>
+        <div class="toolbar" style="margin-top:10px">
+          <strong>Total Debits: $<span id="je-debits">0.00</span></strong>
+          <strong>Total Credits: $<span id="je-credits">0.00</span></strong>
+          <div class="spacer"></div>
+          <button class="btn secondary" id="je-reset">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- THEME -->
+    <section id="theme" role="tabpanel">
+      <div class="card">
+        <h2>Theme & Colors</h2>
+        <p>Pick your own colors. These save in your browser and update the whole site.</p>
+        <div class="grid cols-2">
+          <div>
+            <label>Brand color<input type="color" id="th-brand" class="input" value="#6ea8ff"/></label>
+            <label>Accent 1 (lilac)<input type="color" id="th-brand2" class="input" value="#b387fa"/></label>
+            <label>Accent 2 (mint)<input type="color" id="th-accent" class="input" value="#78d6c6"/></label>
+            <label>Warn (coral)<input type="color" id="th-warn" class="input" value="#ffb4a2"/></label>
+          </div>
+          <div>
+            <button class="btn primary" id="th-save">Save theme</button>
+            <button class="btn secondary" id="th-reset">Reset to default</button>
+            <div style="margin-top:10px">Presets: 
+              <button class="btn secondary" data-preset="ocean">Ocean</button>
+              <button class="btn secondary" data-preset="sunset">Sunset</button>
+              <button class="btn secondary" data-preset="forest">Forest</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>Made with ✨ for students. Your data stays in your browser.</footer>
+  </main>
+
+  <script>
+  // --- Utilities & Storage ---
+  const $ = sel => document.querySelector(sel);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
+  const store = {
+    get(k, d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d } catch{ return d } },
+    set(k, v){ localStorage.setItem(k, JSON.stringify(v)) },
+    wipe(){ localStorage.clear() }
+  };
+
+  // --- Tabs (ARIA) ---
+  const tabs = $$('.tab-btn');
+  const panels = $$('[role="tabpanel"]');
+  tabs.forEach(btn=>btn.addEventListener('click', ()=>{
+    tabs.forEach(b=>b.setAttribute('aria-selected','false'));
+    btn.setAttribute('aria-selected','true');
+    panels.forEach(p=>p.classList.remove('active'));
+    const panel = document.getElementById(btn.getAttribute('aria-controls'));
+    panel.classList.add('active');
+  }));
+
+  // --- Planner Data ---
+  const A_KEY = 'sfh_assignments';
+  const E_KEY = 'sfh_exams';
+  let assignments = store.get(A_KEY, []);
+  let exams = store.get(E_KEY, []);
+
+  function uid(){ return Math.random().toString(36).slice(2,9) }
+  function fmtDate(s){ if(!s) return ''; try{ const d=new Date(s+'T00:00:00'); return d.toLocaleDateString() }catch{ return s } }
+
+  function addAssignment(){
+    const item = { id: uid(), title: $('#a-title').value.trim(), course: $('#a-course').value.trim(), due: $('#a-due').value, urgency: $('#a-urgency').value, notes: $('#a-notes').value.trim(), done:false };
+    if(!item.title) return alert('Add a title');
+    assignments.push(item); store.set(A_KEY, assignments); renderAssignments();
+    ['#a-title','#a-course','#a-due','#a-notes'].forEach(s=>$(s).value='');
+  }
+  function addExam(){
+    const item = { id: uid(), title: $('#e-title').value.trim(), course: $('#e-course').value.trim(), date: $('#e-date').value, urgency: $('#e-urgency').value, scope: $('#e-scope').value.trim(), done:false };
+    if(!item.title) return alert('Add an exam title');
+    exams.push(item); store.set(E_KEY, exams); renderExams();
+    ['#e-title','#e-course','#e-date','#e-scope'].forEach(s=>$(s).value='');
+  }
+
+  function renderAssignments(){
+    const q = ($('#a-search')?.value||'').toLowerCase();
+    const sort = $('#a-sort')?.value||'due';
+    const filt = assignments.filter(a=>!q || [a.title,a.course,a.notes].join(' ').toLowerCase().includes(q));
+    const arr = [...filt].sort((a,b)=>{
+      if(sort==='course') return (a.course||'').localeCompare(b.course||'');
+      if(sort==='urgency') return (a.urgency>b.urgency? -1:1);
+      return (a.due||'').localeCompare(b.due||'');
+    });
+    const urgent = arr.filter(a=>a.urgency==='urgent');
+    const normal = arr.filter(a=>a.urgency!=='urgent');
+    const toHTML = a => `<div class="item">
+      <div>
+        <strong>${a.title}</strong> <small>• ${a.course||'—'}</small><br>
+        <small>${a.due? 'Due '+fmtDate(a.due): 'No due date'}</small> · <span class="pill ${a.urgency==='urgent'?'urgent':''}">${a.urgency}</span>
+        ${a.notes? `<div class="muted">${a.notes}</div>`:''}
+      </div>
+      <div class="toolbar">
+        <label><input type="checkbox" ${a.done?'checked':''} data-act="toggle" data-id="${a.id}"> done</label>
+        <button class="btn secondary" data-act="del" data-id="${a.id}">Delete</button>
+      </div>
+    </div>`;
+    $('#a-urgent').innerHTML = urgent.map(toHTML).join('') || '<div class="muted">No urgent items</div>';
+    $('#a-normal').innerHTML = normal.map(toHTML).join('') || '<div class="muted">No items</div>';
+  }
+  function renderExams(){
+    const q = ($('#e-search')?.value||'').toLowerCase();
+    const sort = $('#e-sort')?.value||'date';
+    const filt = exams.filter(e=>!q || [e.title,e.course,e.scope].join(' ').toLowerCase().includes(q));
+    const arr = [...filt].sort((a,b)=>{
+      if(sort==='course') return (a.course||'').localeCompare(b.course||'');
+      if(sort==='urgency') return (a.urgency>b.urgency? -1:1);
+      return (a.date||'').localeCompare(b.date||'');
+    });
+    const urgent = arr.filter(e=>e.urgency==='urgent');
+    const normal = arr.filter(e=>e.urgency!=='urgent');
+    const toHTML = e => `<div class="item">
+      <div>
+        <strong>${e.title}</strong> <small>• ${e.course||'—'}</small><br>
+        <small>${e.date? 'On '+fmtDate(e.date): 'No date'}</small> · <span class="pill ${e.urgency==='urgent'?'urgent':''}">${e.urgency}</span>
+        ${e.scope? `<div class="muted">${e.scope}</div>`:''}
+      </div>
+      <div class="toolbar">
+        <label><input type="checkbox" ${e.done?'checked':''} data-eact="toggle" data-id="${e.id}"> done</label>
+        <button class="btn secondary" data-eact="del" data-id="${e.id}">Delete</button>
+      </div>
+    </div>`;
+    $('#e-urgent').innerHTML = urgent.map(toHTML).join('') || '<div class="muted">No urgent exams</div>';
+    $('#e-normal').innerHTML = normal.map(toHTML).join('') || '<div class="muted">No exams</div>';
+  }
+
+  // Planner events
+  $('#a-add').addEventListener('click', addAssignment);
+  $('#e-add').addEventListener('click', addExam);
+  $('#a-search').addEventListener('input', renderAssignments);
+  $('#e-search').addEventListener('input', renderExams);
+  $('#a-sort').addEventListener('change', renderAssignments);
+  $('#e-sort').addEventListener('change', renderExams);
+  $('#a-clear-done').addEventListener('click', ()=>{ assignments = assignments.filter(a=>!a.done); store.set(A_KEY, assignments); renderAssignments(); });
+  $('#e-clear-done').addEventListener('click', ()=>{ exams = exams.filter(e=>!e.done); store.set(E_KEY, exams); renderExams(); });
+  $('#planner').addEventListener('click', (ev)=>{
+    const t = ev.target;
+    if(t.matches('input[data-act="toggle"]')){
+      const id=t.getAttribute('data-id'); const a=assignments.find(x=>x.id===id); if(a){a.done=t.checked; store.set(A_KEY,assignments);} }
+    if(t.matches('button[data-act="del"]')){
+      const id=t.getAttribute('data-id'); assignments = assignments.filter(x=>x.id!==id); store.set(A_KEY,assignments); renderAssignments(); }
+    if(t.matches('input[data-eact="toggle"]')){
+      const id=t.getAttribute('data-id'); const e=exams.find(x=>x.id===id); if(e){e.done=t.checked; store.set(E_KEY,exams);} }
+    if(t.matches('button[data-eact="del"]')){
+      const id=t.getAttribute('data-id'); exams = exams.filter(x=>x.id!==id); store.set(E_KEY,exams); renderExams(); }
+  });
+
+  // --- Account Lookup --- (expanded set)
+  const accounts = [
+    {name:'Cash', type:'Asset', normal:'Debit', desc:'Currency on hand and in bank accounts.', entries:['Receive cash sale: Dr Cash / Cr Sales Revenue','Pay utilities: Dr Utilities Expense / Cr Cash']},
+    {name:'Petty Cash', type:'Asset', normal:'Debit', desc:'Small cash fund for minor expenses.', entries:['Establish fund: Dr Petty Cash / Cr Cash','Replenish: Dr Expenses / Cr Cash']},
+    {name:'Accounts Receivable', type:'Asset', normal:'Debit', desc:'Amounts owed by customers for sales on account.', entries:['Sale on account: Dr A/R / Cr Sales Revenue','Customer pays: Dr Cash / Cr A/R']},
+    {name:'Notes Receivable', type:'Asset', normal:'Debit', desc:'Formal written promise from customers to pay.', entries:['Receive note: Dr Notes Receivable / Cr A/R','Collect note + interest: Dr Cash / Cr Notes Receivable; Cr Interest Revenue']},
+    {name:'Interest Receivable', type:'Asset', normal:'Debit', desc:'Interest earned but not yet received.', entries:['Accrue interest: Dr Interest Receivable / Cr Interest Revenue']},
+    {name:'Supplies', type:'Asset', normal:'Debit', desc:'Items used in operations.', entries:['Buy supplies cash: Dr Supplies / Cr Cash','Adjust used supplies: Dr Supplies Expense / Cr Supplies']},
+    {name:'Inventory', type:'Asset', normal:'Debit', desc:'Goods held for sale.', entries:['Purchase inventory: Dr Inventory / Cr A/P','Sell goods (perpetual): Dr COGS / Cr Inventory']},
+    {name:'Freight-In', type:'Cost/Inventory', normal:'Debit', desc:'Buyer’s shipping cost; part of inventory.', entries:['Record: Dr Inventory / Cr Cash or A/P']},
+    {name:'Prepaid Insurance', type:'Asset', normal:'Debit', desc:'Paid in advance; expense later.', entries:['Purchase: Dr Prepaid Insurance / Cr Cash','Adjust: Dr Insurance Expense / Cr Prepaid Insurance']},
+    {name:'Prepaid Rent', type:'Asset', normal:'Debit', desc:'Rent paid ahead of time.', entries:['Pay rent in advance: Dr Prepaid Rent / Cr Cash','Adjust: Dr Rent Expense / Cr Prepaid Rent']},
+    {name:'Equipment', type:'Asset', normal:'Debit', desc:'Long‑term operating assets.', entries:['Buy: Dr Equipment / Cr Cash or Notes Payable']},
+    {name:'Accumulated Depreciation', type:'Contra‑Asset', normal:'Credit', desc:'Contra to equipment; reduces book value.', entries:['Record depreciation: Dr Depreciation Expense / Cr Accumulated Depreciation']},
+    {name:'Intangibles (Patents)', type:'Asset', normal:'Debit', desc:'Non‑physical assets.', entries:['Amortize: Dr Amortization Expense / Cr Accumulated Amortization']},
+    {name:'Goodwill', type:'Asset', normal:'Debit', desc:'Acquisition premium over fair value.', entries:['Impairment: Dr Impairment Loss / Cr Goodwill']},
+
+    {name:'Accounts Payable', type:'Liability', normal:'Credit', desc:'Amounts owed to suppliers.', entries:['Buy on account: Dr Supplies or Inventory / Cr A/P','Pay supplier: Dr A/P / Cr Cash']},
+    {name:'Wages/Salaries Payable', type:'Liability', normal:'Credit', desc:'Accrued wages owed.', entries:['Accrue wages: Dr Salaries Expense / Cr Salaries Payable','Pay wages: Dr Salaries Payable / Cr Cash']},
+    {name:'Interest Payable', type:'Liability', normal:'Credit', desc:'Interest owed but unpaid.', entries:['Accrue interest: Dr Interest Expense / Cr Interest Payable']},
+    {name:'Sales Tax Payable', type:'Liability', normal:'Credit', desc:'Sales taxes collected for remittance.', entries:['Collect tax: Dr Cash / Cr Sales Revenue; Cr Sales Tax Payable','Remit tax: Dr Sales Tax Payable / Cr Cash']},
+    {name:'Unearned Revenue', type:'Liability', normal:'Credit', desc:'Cash received before earning.', entries:['Receive in advance: Dr Cash / Cr Unearned Revenue','Earn it: Dr Unearned Revenue / Cr Service Revenue']},
+    {name:'Notes Payable', type:'Liability', normal:'Credit', desc:'Formal written obligations with interest.', entries:['Sign note: Dr Cash / Cr Notes Payable','Accrue interest: Dr Interest Expense / Cr Interest Payable']},
+    {name:'Warranty Liability', type:'Liability', normal:'Credit', desc:'Estimated future warranty costs.', entries:['Record estimate: Dr Warranty Expense / Cr Warranty Liability','Actual repair: Dr Warranty Liability / Cr Cash/Inventory']},
+    {name:'Dividends Payable', type:'Liability', normal:'Credit', desc:'Dividends declared but unpaid.', entries:['Payment: Dr Dividends Payable / Cr Cash']},
+    
+    {name:'Common Stock / Capital', type:'Equity', normal:'Credit', desc:'Owner investments.', entries:['Issue shares: Dr Cash / Cr Common Stock']},
+    {name:'Preferred Stock', type:'Equity', normal:'Credit', desc:'Preferred class of shares.', entries:['Issue: Dr Cash / Cr Preferred Stock; Cr APIC']},
+    {name:'Additional Paid‑In Capital (APIC)', type:'Equity', normal:'Credit', desc:'Amounts above par value.', entries:['Issue above par: Cr APIC']},
+    {name:'Treasury Stock', type:'Contra‑Equity', normal:'Debit', desc:'Company’s own shares repurchased.', entries:['Buyback: Dr Treasury Stock / Cr Cash']},
+    {name:'Retained Earnings', type:'Equity', normal:'Credit', desc:'Accumulated net income minus dividends.', entries:['Close NI at period end']},
+    {name:'Dividends / Withdrawals', type:'Contra‑Equity', normal:'Debit', desc:'Owner distributions reduce equity.', entries:['Declare dividend: Dr Dividends / Cr Dividends Payable']},
+
+    {name:'Service Revenue / Sales', type:'Revenue', normal:'Credit', desc:'Earnings from operations.', entries:['Cash sale: Dr Cash / Cr Sales Revenue']},
+    {name:'Sales Returns & Allowances', type:'Contra‑Revenue', normal:'Debit', desc:'Reduces sales.', entries:['Return: Dr Sales Returns & Allowances / Cr Cash or A/R']},
+    {name:'Interest Revenue', type:'Revenue', normal:'Credit', desc:'Interest earned on notes/loans.', entries:['Accrue: Dr Interest Receivable / Cr Interest Revenue']},
+
+    {name:'Cost of Goods Sold', type:'Expense', normal:'Debit', desc:'Cost assigned to goods sold.', entries:['Sale (perpetual): Dr COGS / Cr Inventory']},
+    {name:'Rent Expense', type:'Expense', normal:'Debit', desc:'Cost of occupying space.', entries:['Record rent: Dr Rent Expense / Cr Cash or A/P']},
+    {name:'Salaries Expense', type:'Expense', normal:'Debit', desc:'Wages for employees.', entries:['Pay payroll: Dr Salaries Expense / Cr Cash or Wages Payable']},
+    {name:'Utilities Expense', type:'Expense', normal:'Debit', desc:'Electric, water, etc.', entries:['Pay bill: Dr Utilities Expense / Cr Cash or A/P']},
+    {name:'Advertising Expense', type:'Expense', normal:'Debit', desc:'Promotion and ads.', entries:['Pay ad: Dr Advertising Expense / Cr Cash or A/P']},
+    {name:'Maintenance & Repairs Expense', type:'Expense', normal:'Debit', desc:'Upkeep of assets.', entries:['Repair: Dr M&R Expense / Cr Cash or A/P']},
+    {name:'Delivery Expense (Freight‑Out)', type:'Expense', normal:'Debit', desc:'Shipping to customers.', entries:['Pay shipping: Dr Delivery Expense / Cr Cash or A/P']},
+    {name:'Depreciation Expense', type:'Expense', normal:'Debit', desc:'Periodic allocation of asset cost.', entries:['Record: Dr Depreciation Expense / Cr Accumulated Depreciation']},
+    {name:'Amortization Expense', type:'Expense', normal:'Debit', desc:'Allocation of intangible cost.', entries:['Record: Dr Amortization Expense / Cr Accumulated Amortization']},
+    {name:'Bad Debt Expense', type:'Expense', normal:'Debit', desc:'Uncollectible A/R.', entries:['Adjust allow.: Dr Bad Debt Expense / Cr Allowance for Doubtful Accounts']},
+    {name:'Income Tax Expense', type:'Expense', normal:'Debit', desc:'Taxes on income.', entries:['Accrue tax: Dr Income Tax Expense / Cr Income Tax Payable']},
+    {name:'Income Tax Payable', type:'Liability', normal:'Credit', desc:'Taxes owed.', entries:['Pay tax: Dr Income Tax Payable / Cr Cash']},
+    {name:'Allowance for Doubtful Accounts', type:'Contra‑Asset', normal:'Credit', desc:'Estimated uncollectible A/R.', entries:['Write‑off: Dr Allowance / Cr A/R']},
+  ];
+
+  function renderAcctResults(list){
+    const html = list.map(a=>`<div class="item">
+      <div>
+        <strong>${a.name}</strong> <span class="pill">${a.type}</span> <small>Normal balance: <em>${a.normal}</em></small>
+        <div class="muted">${a.desc}</div>
+        <ul>${a.entries.map(e=>`<li>${e}</li>`).join('')}</ul>
+      </div>
+    </div>`).join('');
+    $('#acct-results').innerHTML = html || '<div class="muted">No matches yet. Try searching “cash”, “unearned revenue”, “A/R”…</div>';
+  }
+  renderAcctResults(accounts.slice(0,12));
+  $('#acct-q').addEventListener('input', ()=>{
+    const q=$('#acct-q').value.toLowerCase();
+    const hits = accounts.filter(a=>[a.name,a.type,a.desc,...a.entries].join(' ').toLowerCase().includes(q));
+    renderAcctResults(hits);
+  });
+  $('#acct-clear').addEventListener('click', ()=>{ $('#acct-q').value=''; renderAcctResults(accounts.slice(0,12)); });
+
+  // --- Practice Templates Logic ---
+  const num = v => { const n=parseFloat(v); return isNaN(n)?0:n };
+
+  function calcIncome(){
+    const g = sel => num(document.querySelector(`[data-inc="${sel}"]`).value);
+    const ni = (g('revenue')+g('otherrev')) - (g('cogs')+g('opex')+g('otherexp'));
+    $('#inc-ni').textContent = ni.toFixed(2);
+    return ni;
+  }
+  $$('#inc-body input').forEach(i=>i.addEventListener('input', calcIncome));
+  $('#inc-reset').addEventListener('click', ()=>{ $$('#inc-body input').forEach(i=>i.value=''); calcIncome(); });
+  $('#inc-save').addEventListener('click', ()=>{
+    const data={}; $$('#inc-body input').forEach(i=>data[i.getAttribute('data-inc')]=num(i.value));
+    store.set('sfh_inc', data);
+    alert('Income statement saved');
+  });
+  (function(){ const d=store.get('sfh_inc'); if(d){ for(const k in d){ const el=document.querySelector(`[data-inc="${k}"]`); if(el) el.value=d[k]; } calcIncome(); } })();
+
+  function calcBS(){
+    let TA=0,TLE=0;
+    $$('#bs-assets input').forEach(i=>TA+=num(i.value));
+    $$('#bs-le input').forEach(i=>TLE+=num(i.value));
+    $('#bs-ta').textContent=TA.toFixed(2); $('#bs-tle').textContent=TLE.toFixed(2);
+    const badge=$('#bs-badge');
+    if(TA===0 && TLE===0){ badge.textContent='Not calculated'; badge.style.background='#eef2ff'; return; }
+    if(Math.abs(TA-TLE)<0.005){ badge.textContent='Balanced ✅'; badge.style.background='var(--ok)'; }
+    else { badge.textContent='Not balanced ⚠️'; badge.style.background='var(--warn)'; }
+  }
+  $$('#bs-card input').forEach(i=>i.addEventListener('input', calcBS));
+  $('#bs-reset').addEventListener('click', ()=>{ $$('#bs-card input').forEach(i=>i.value=''); calcBS(); });
+  $('#bs-save').addEventListener('click', ()=>{
+    const data={assets:{}, le:{}, equity:{}};
+    $$('#bs-assets input').forEach(i=>data.assets[i.getAttribute('data-bs-a')]=num(i.value));
+    $$('#bs-le input[data-bs-l]').forEach(i=>data.le[i.getAttribute('data-bs-l')]=num(i.value));
+    $$('#bs-le input[data-bs-e]').forEach(i=>data.equity[i.getAttribute('data-bs-e')]=num(i.value));
+    store.set('sfh_bs', data); alert('Balance sheet saved');
+  });
+  (function(){ const d=store.get('sfh_bs'); if(d){
+    for(const k in d.assets){ const el=document.querySelector(`[data-bs-a="${k}"]`); if(el) el.value=d.assets[k]; }
+    for(const k in d.le){ const el=document.querySelector(`[data-bs-l="${k}"]`); if(el) el.value=d.le[k]; }
+    for(const k in d.equity){ const el=document.querySelector(`[data-bs-e="${k}"]`); if(el) el.value=d.equity[k]; }
+    calcBS();
+  }})();
+
+  // Journal entries
+  let jeLines = [];
+  function renderJE(){
+    const container = $('#je-lines');
+    if(jeLines.length===0){ container.innerHTML='<div class="muted">No lines yet. Add lines for debits/credits.</div>'; $('#je-debits').textContent='0.00'; $('#je-credits').textContent='0.00'; return; }
+    let tD=0,tC=0;
+    container.innerHTML = jeLines.map((ln,idx)=>{
+      if(ln.dc==='Debit') tD+=num(ln.amt); else tC+=num(ln.amt);
+      return `<div class="item">
+        <div class="row" style="align-items:center">
+          <input class="input" value="${ln.acct}" data-idx="${idx}" data-f="acct" placeholder="Account"/>
+          <select class="input" data-idx="${idx}" data-f="dc">
+            <option ${ln.dc==='Debit'?'selected':''}>Debit</option>
+            <option ${ln.dc==='Credit'?'selected':''}>Credit</option>
+          </select>
+          <input type="number" step="0.01" class="input" value="${ln.amt}" data-idx="${idx}" data-f="amt" placeholder="Amount"/>
+        </div>
+        <div class="toolbar">
+          <button class="btn secondary" data-je="del" data-idx="${idx}">Delete</button>
+        </div>
+      </div>`;
+    }).join('');
+    $('#je-debits').textContent=tD.toFixed(2);
+    $('#je-credits').textContent=tC.toFixed(2);
+  }
+  $('#je-add-line').addEventListener('click', ()=>{ jeLines.push({acct:'', dc:'Debit', amt:''}); renderJE(); });
+  $('#je-lines').addEventListener('input', (e)=>{
+    const t=e.target; const i=+t.getAttribute('data-idx'); const f=t.getAttribute('data-f'); if(jeLines[i]){ jeLines[i][f]=t.value; renderJE(); }
+  });
+  $('#je-lines').addEventListener('click', (e)=>{ if(e.target.matches('[data-je="del"]')){ const i=+e.target.getAttribute('data-idx'); jeLines.splice(i,1); renderJE(); }});
+  $('#je-reset').addEventListener('click', ()=>{ jeLines=[]; renderJE(); $('#je-date').value=''; $('#je-memo').value=''; });
+  $('#je-save').addEventListener('click', ()=>{
+    const entry = { id:uid(), date: $('#je-date').value, memo: $('#je-memo').value, lines: jeLines };
+    if(!entry.lines.length) return alert('Add at least one line');
+    const deb=jeLines.filter(l=>l.dc==='Debit').reduce((s,l)=>s+num(l.amt),0);
+    const cre=jeLines.filter(l=>l.dc==='Credit').reduce((s,l)=>s+num(l.amt),0);
+    if(Math.abs(deb-cre) > 0.005) return alert('Debits and credits must be equal');
+    const all = store.get('sfh_journal', []); all.push(entry); store.set('sfh_journal', all);
+    alert('Journal entry saved');
+  });
+
+  // THEME persistence
+  const THEME_KEY='sfh_theme';
+  function applyTheme(th){
+    if(!th) return;
+    const r=document.documentElement.style;
+    if(th.brand) r.setProperty('--brand', th.brand);
+    if(th.brand2) r.setProperty('--brand-2', th.brand2);
+    if(th.accent) r.setProperty('--accent', th.accent);
+    if(th.warn) r.setProperty('--warn', th.warn);
+  }
+  const savedTheme = store.get(THEME_KEY, null); applyTheme(savedTheme);
+  function getThemeFromInputs(){
+    return { brand: $('#th-brand').value, brand2: $('#th-brand2').value, accent: $('#th-accent').value, warn: $('#th-warn').value }
+  }
+  function setInputsFromTheme(th){ if(!th) return; $('#th-brand').value=th.brand||'#6ea8ff'; $('#th-brand2').value=th.brand2||'#b387fa'; $('#th-accent').value=th.accent||'#78d6c6'; $('#th-warn').value=th.warn||'#ffb4a2'; }
+  // Initialize inputs when theme tab is opened
+  document.getElementById('tab-theme').addEventListener('click', ()=> setInputsFromTheme(store.get(THEME_KEY, {})));
+  $('#th-save').addEventListener('click', ()=>{ const th=getThemeFromInputs(); store.set(THEME_KEY, th); applyTheme(th); alert('Theme saved'); });
+  $('#th-reset').addEventListener('click', ()=>{ const th={brand:'#6ea8ff',brand2:'#b387fa',accent:'#78d6c6',warn:'#ffb4a2'}; store.set(THEME_KEY, th); applyTheme(th); setInputsFromTheme(th); });
+  document.querySelectorAll('[data-preset]').forEach(btn=>btn.addEventListener('click', ()=>{
+    const p=btn.getAttribute('data-preset'); let th;
+    if(p==='ocean') th={brand:'#5aa9e6',brand2:'#7fc8f8',accent:'#9fe7f5',warn:'#ffd6ba'};
+    if(p==='sunset') th={brand:'#ff8ba7',brand2:'#ffa6c1',accent:'#ffd6a5',warn:'#ffd6ba'};
+    if(p==='forest') th={brand:'#86efac',brand2:'#a7f3d0',accent:'#6ee7b7',warn:'#fbcfe8'};
+    store.set(THEME_KEY, th); applyTheme(th); setInputsFromTheme(th);
+  }));
+
+  // Ensure planner add panel appears after lists
+  (function(){ const list=$('#planner-list'); const add=$('#planner-add'); if(list && add){ list.after(add); } })();
+
+  // Initial renders
+  renderAssignments(); renderExams(); renderJE(); calcIncome(); calcBS();
+  </script>
+</body>
+</html>
+    
+  </body>
+  
+</html>
